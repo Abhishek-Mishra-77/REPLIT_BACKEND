@@ -4,6 +4,8 @@ import cors from "cors";
 import Database from "./utils/database.js";
 const app = express();
 
+import authRoutes from "./routes/authRoutes.js";
+
 /* -------------------------------------------------------------------------- */
 /*                           SERVER CONFIGURATION                             */
 /* -------------------------------------------------------------------------- */
@@ -16,12 +18,14 @@ app.use(cors());
 /*                           ROUTES ORIGIN                                    */
 /* -------------------------------------------------------------------------- */
 
-const PORT = process.env.PORT || 5000;
+app.use("/", authRoutes)
 
 
 /* -------------------------------------------------------------------------- */
 /*                           SERVER AND DATABASE SETUP                        */
 /* -------------------------------------------------------------------------- */
+
+const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, async () => {
     await Database();
