@@ -7,14 +7,22 @@ import {
     removeUser,
     getUserById,
     getAllUsers,
-    loginUser
+    loginUser,
+    tokenVerification
 } from "../controllers/authControllers.js";
 
+import authMiddleware from "../middlewares/authMiddleware.js";
+
+/* -------------------------------------------------------------------------- */
+/*                                 AUTH ROUTES                                */
+/* -------------------------------------------------------------------------- */
+
 router.post('/create', createUser);
+router.post('/verify-token', authMiddleware, tokenVerification);
 router.post('/login', loginUser);
-router.put('/update/:id', updateUser);
-router.delete('/remove/:id', removeUser);
-router.get('/user/:id', getUserById);
-router.get('/users', getAllUsers);
+router.put('/update/:id', authMiddleware, updateUser);
+router.delete('/remove/:id', authMiddleware, removeUser);
+router.get('/user/:id', authMiddleware, getUserById);
+router.get('/users', authMiddleware, getAllUsers);
 
 export default router;
