@@ -1,6 +1,7 @@
 import User from "./../models/authModels.js";
 import bcrypt from "bcryptjs";
 import { generateToken } from "../services/generateToken.js";
+import { isValidObjectId } from "../services/mongoIdValidation.js";
 
 /* -------------------------------------------------------------------------- */
 /*                           CREATE USER                                      */
@@ -51,6 +52,10 @@ const updateUser = async (req, res) => {
         const { userId } = req.params;
         const updates = req.body;
 
+        if (!isValidObjectId(userId)) {
+            return res.status(400).json({ message: "Invalid user ID" });
+        }
+
         const updatedUser = await User.findByIdAndUpdate(userId, updates, { new: true });
 
         if (!updatedUser) {
@@ -70,6 +75,10 @@ const removeUser = async (req, res) => {
     try {
         const { userId } = req.params;
 
+        if (!isValidObjectId(userId)) {
+            return res.status(400).json({ message: "Invalid user ID" });
+        }
+
         const user = await User.findByIdAndDelete(userId);
 
         if (!user) {
@@ -88,6 +97,10 @@ const removeUser = async (req, res) => {
 const getUserById = async (req, res) => {
     try {
         const { userId } = req.params;
+
+        if (!isValidObjectId(userId)) {
+            return res.status(400).json({ message: "Invalid user ID" });
+        }
 
         const user = await User.findById(userId);
 
@@ -156,6 +169,10 @@ const tokenVerification = async (req, res) => {
 
         if (!req.userId) {
             return res.status(400).json({ message: "Invalid token or user not authenticated" });
+        }
+
+        if (!isValidObjectId(req.userId)) {
+            return res.status(400).json({ message: "Invalid user ID" });
         }
 
         const user = await User.findOne({ _id: req.userId });
