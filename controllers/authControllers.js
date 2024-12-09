@@ -262,7 +262,9 @@ const verifyAndloginByOtp = async (req, res) => {
     }
 };
 
-
+/* -------------------------------------------------------------------------- */
+/*                           SEND OTP TO EMAIL                                */
+/* -------------------------------------------------------------------------- */
 const sendOtpToEmailForLogin = async (req, res) => {
     const { email } = req.body;
 
