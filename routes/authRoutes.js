@@ -8,7 +8,9 @@ import {
     getUserById,
     getAllUsers,
     loginUser,
-    tokenVerification
+    tokenVerification,
+    verifyAndloginByOtp,
+    sendOtpToEmailForLogin
 } from "../controllers/authControllers.js";
 
 import authMiddleware from "../middlewares/authMiddleware.js";
@@ -18,6 +20,8 @@ import authMiddleware from "../middlewares/authMiddleware.js";
 /* -------------------------------------------------------------------------- */
 
 router.post('/create', createUser);
+router.post('/verifybyotp', verifyAndloginByOtp);
+router.post('/sendotp', sendOtpToEmailForLogin);
 router.post('/verify-token', authMiddleware, tokenVerification);
 router.post('/login', loginUser);
 router.put('/update/:id', authMiddleware, updateUser);
