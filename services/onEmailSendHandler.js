@@ -29,7 +29,7 @@ async function sendOTPToEmail(email, otp) {
             <h1 style="margin: 0; font-size: 24px;">Your OTP Code</h1>
           </div>
           <div style="padding: 20px; text-align: center; color: #333333;">
-            <h2 style="margin: 20px 0; font-size: 22px; color: #1C2333;">Hello</h2>
+            <h2 style="margin: 20px 0; font-size: 22px; color: #1C2333;">Hello ${email}</h2>
             <p style="margin: 10px 0; line-height: 1.5;">Thank you for using our service! Your OTP code is:</p>
             <div style="display: inline-block; padding: 10px 20px; font-size: 18px; background: #1C2333; color: #ffffff; border-radius: 4px; margin-top: 20px; text-decoration: none;">
               ${otp}
