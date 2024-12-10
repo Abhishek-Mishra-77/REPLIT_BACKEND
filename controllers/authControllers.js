@@ -5,6 +5,7 @@ import { isValidObjectId } from "../services/mongoIdValidation.js";
 import Otp from "./../models/authOtp.js";
 import sendOTPToEmail from "../services/onEmailSendHandler.js";
 import jwt from "jsonwebtoken"
+import mongoose from "mongoose";
 
 /* -------------------------------------------------------------------------- */
 /*                           CREATE USER                                      */
@@ -200,7 +201,7 @@ const tokenVerification = async (req, res) => {
 /*                           OTP VERIFICATION                                 */
 /* -------------------------------------------------------------------------- */
 
-const verifyAndloginByOtp = async (req, res) => {
+const verifyAndLoginByOtp = async (req, res) => {
     const { userId, otp } = req.body;
 
     if (!userId || !otp) {
@@ -208,33 +209,32 @@ const verifyAndloginByOtp = async (req, res) => {
     }
 
     try {
-
-        if (!isValidObjectId(userId)) {
+        // Validate the user ID
+        if (!mongoose.Types.ObjectId.isValid(userId)) {
             return res.status(400).json({ message: "Invalid user ID." });
         }
 
         const otpRecord = await Otp.findOne({ user: userId, otp });
 
         if (!otpRecord) {
-            // Validate user ID
             return res.status(400).json({ message: "Invalid OTP" });
         }
 
         if (otpRecord.attempts >= 3) {
-            // If maximum attempts exceeded, delete OTP record and user account
-            await Otp.deleteOne({ user: userId, otp });
+            await Otp.deleteMany({ user: userId });
             await User.deleteOne({ _id: userId });
-            return res.status(400).json({ message: "Maximum attempts exceeded. OTP deleted and user account deleted." });
+            return res.status(400).json({ message: "Maximum attempts exceeded. OTPs and user account deleted." });
         }
 
         if (otpRecord.expiresAt < Date.now()) {
-            await Otp.deleteOne({ user: userId, otp });
+            await Otp.deleteMany({ user: userId });
             await User.deleteOne({ _id: userId });
-            return res.status(400).json({ message: "OTP has expired. OTP deleted and user account deleted." });
+            return res.status(400).json({ message: "OTP has expired. OTPs and user account deleted." });
         }
 
+        // OTP is correct, proceed to generate the JWT token
         if (otpRecord.otp === otp) {
-            await Otp.deleteOne({ user: userId, otp });
+            // Generate the JWT token
             const user = await User.findById(userId);
 
             const token = jwt.sign(
@@ -243,8 +243,13 @@ const verifyAndloginByOtp = async (req, res) => {
                 { expiresIn: "24h" }
             );
 
-            res.status(200).json({
-                message: "OTP verified successfully", token, user: {
+            // Delete all OTP records and the user after successful verification and token generation
+            await Otp.deleteMany({ user: userId });  // Delete all OTP records for the user
+
+            return res.status(200).json({
+                message: "OTP verified successfully",
+                token,
+                user: {
                     id: user._id,
                     name: user.name,
                     email: user.email,
@@ -254,14 +259,13 @@ const verifyAndloginByOtp = async (req, res) => {
         } else {
             otpRecord.attempts += 1;
             await otpRecord.save();
-            res.status(400).json({ message: "Invalid OTP" });
+            return res.status(400).json({ message: "Invalid OTP" });
         }
     } catch (error) {
         console.error("Error during OTP verification:", error);
         res.status(500).json({ message: "Failed to verify OTP", error: error.message });
     }
 };
-
 /* -------------------------------------------------------------------------- */
 /*                           SEND OTP TO EMAIL                                */
 /* -------------------------------------------------------------------------- */
@@ -303,5 +307,5 @@ export {
     loginUser,
     tokenVerification,
     sendOtpToEmailForLogin,
-    verifyAndloginByOtp
+    verifyAndLoginByOtp
 };

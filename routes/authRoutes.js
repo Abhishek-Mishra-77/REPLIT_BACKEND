@@ -9,7 +9,7 @@ import {
     getAllUsers,
     loginUser,
     tokenVerification,
-    verifyAndloginByOtp,
+    verifyAndLoginByOtp,
     sendOtpToEmailForLogin
 } from "../controllers/authControllers.js";
 
@@ -20,7 +20,7 @@ import authMiddleware from "../middlewares/authMiddleware.js";
 /* -------------------------------------------------------------------------- */
 
 router.post('/create', createUser);
-router.post('/verifybyotp', verifyAndloginByOtp);
+router.post('/verifybyotp', verifyAndLoginByOtp);
 router.post('/sendotp', sendOtpToEmailForLogin);
 router.post('/verify-token', authMiddleware, tokenVerification);
 router.post('/login', loginUser);
