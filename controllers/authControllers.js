@@ -53,14 +53,14 @@ const createUser = async (req, res) => {
 /* -------------------------------------------------------------------------- */
 const updateUser = async (req, res) => {
     try {
-        const { userId } = req.params;
+        const { id } = req.params;
         const updates = req.body;
 
-        if (!isValidObjectId(userId)) {
+        if (!isValidObjectId(id)) {
             return res.status(400).json({ message: "Invalid user ID" });
         }
 
-        const updatedUser = await User.findByIdAndUpdate(userId, updates, { new: true });
+        const updatedUser = await User.findByIdAndUpdate(id, updates, { new: true });
 
         if (!updatedUser) {
             return res.status(404).json({ message: "User not found" });
