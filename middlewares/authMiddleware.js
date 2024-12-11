@@ -1,4 +1,5 @@
 import jwt from "jsonwebtoken";
+import User from "../models/authModels.js";
 
 /* -------------------------------------------------------------------------- */
 /*                           MIDDLEWARE CONFIGURATION                         */

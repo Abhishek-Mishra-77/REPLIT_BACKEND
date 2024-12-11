@@ -77,13 +77,13 @@ const updateUser = async (req, res) => {
 /* -------------------------------------------------------------------------- */
 const removeUser = async (req, res) => {
     try {
-        const { userId } = req.params;
-
-        if (!isValidObjectId(userId)) {
+        const { id } = req.params;
+        console.log(id)
+        if (!isValidObjectId(id)) {
             return res.status(400).json({ message: "Invalid user ID" });
         }
 
-        const user = await User.findByIdAndDelete(userId);
+        const user = await User.findByIdAndDelete(id);
 
         if (!user) {
             return res.status(404).json({ message: "User not found" });
@@ -123,6 +123,17 @@ const getUserById = async (req, res) => {
 /* -------------------------------------------------------------------------- */
 const getAllUsers = async (req, res) => {
     try {
+
+        const user = await User.findById(req.userId);
+
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        if (user.role !== "admin") {
+            return res.status(403).json({ message: "Access denied" });
+        }
+
         const users = await User.find().select('-password');
         res.status(200).json({ users });
     } catch (error) {
