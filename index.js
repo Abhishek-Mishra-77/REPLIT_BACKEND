@@ -5,6 +5,9 @@ import Database from "./utils/database.js";
 const app = express();
 
 import authRoutes from "./routes/authRoutes.js";
+import folderRoutes from "./routes/folderRoutes.js";
+import fileRoutes from "./routes/fileRoutes.js";
+import langaugeRoutes from "./routes/LangaugeRoutes.js";
 
 /* -------------------------------------------------------------------------- */
 /*                           SERVER CONFIGURATION                             */
@@ -19,6 +22,9 @@ app.use(cors());
 /* -------------------------------------------------------------------------- */
 
 app.use("/auth", authRoutes)
+app.use("/folders", folderRoutes)
+app.use('/files', fileRoutes)
+app.use('/langauges', langaugeRoutes)
 
 
 /* -------------------------------------------------------------------------- */

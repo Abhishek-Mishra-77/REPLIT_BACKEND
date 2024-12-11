@@ -2,6 +2,10 @@ import nodemailer from 'nodemailer';
 
 
 
+/* -------------------------------------------------------------------------- */
+/*                                 EMAIL LOGIC                                */
+/* -------------------------------------------------------------------------- */
+
 const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {

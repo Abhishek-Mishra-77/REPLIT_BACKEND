@@ -1,17 +1,12 @@
 import mongoose from "mongoose";
 
 /* -------------------------------------------------------------------------- */
-/*                           FOLDER SCHEMA                                    */
+/*                           LANGUAGE SCHEMA                                  */
 /* -------------------------------------------------------------------------- */
 
-const folderSchema = new mongoose.Schema({
+const langaugeSchema = new mongoose.Schema({
     name: {
         type: String,
-        required: true
-    },
-    userId: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "User",
         required: true
     },
     createAt: {
@@ -20,6 +15,6 @@ const folderSchema = new mongoose.Schema({
     }
 })
 
-const Folder = mongoose.model("Folder", folderSchema);
+const Langauge = mongoose.model("Langauge", langaugeSchema);
 
-export default Folder;
+export default Langauge;

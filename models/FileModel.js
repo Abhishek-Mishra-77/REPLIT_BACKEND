@@ -13,8 +13,12 @@ const fileSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    folderId : {
+    folderId: {
         type: String
+    },
+    langauge: {
+        type: String,
+        required: true
     },
     createAt: {
         type: Date,
