@@ -38,6 +38,8 @@ const createFolder = async (req, res) => {
 const updateFolder = async (req, res) => {
     const { id } = req.params;
     const { name } = req.body;
+
+    console.log(name);
     try {
         if (!isValidObjectId(id)) return res.status(400).json({ message: "Invalid folder ID" });
 
