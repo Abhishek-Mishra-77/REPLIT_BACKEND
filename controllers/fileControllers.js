@@ -2,12 +2,12 @@ import File from "../models/fileModel.js";
 import { isValidObjectId } from "../services/mongoIdValidation.js";
 import Folder from "../models/folderModel.js";
 
-
 /* -------------------------------------------------------------------------- */
 /*                           CREATE FILE                                      */
 /* -------------------------------------------------------------------------- */
 const createFile = async (req, res) => {
-    const { name, userId, folderId, langauge } = req.body;
+    const { name, folderId, langauge } = req.body;
+    const { userId } = req.userId;
     try {
         if (!name || !userId || !folderId || !langauge) return res.status(400).json({ message: "Name, user ID, folder ID and langauge are required" });
 
