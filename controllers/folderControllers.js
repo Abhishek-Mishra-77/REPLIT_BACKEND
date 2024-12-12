@@ -7,22 +7,22 @@ import { isValidObjectId } from "../services/mongoIdValidation.js";
 /*                           CREATE FOLDER                                    */
 /* -------------------------------------------------------------------------- */
 const createFolder = async (req, res) => {
-    const { name, userId } = req.body;
+    const { name } = req.body;
     try {
 
-        if (!name || !userId) return res.status(400).json({ message: "Name and user ID are required" });
+        if (!name || !req.userId) return res.status(400).json({ message: "Name and user ID are required" });
 
-        if (!isValidObjectId(userId)) return res.status(400).json({ message: "Invalid user ID" });
+        if (!isValidObjectId(req.userId)) return res.status(400).json({ message: "Invalid user ID" });
 
         const existingFolder = await Folder.findOne({ name });
 
         if (existingFolder) return res.status(400).json({ message: "Folder already exists" });
 
-        if (!await User.findById(userId)) return res.status(400).json({ message: "User ID not found" });
+        if (!await User.findById(req.userId)) return res.status(400).json({ message: "User ID not found" });
 
         const newFolder = new Folder({
             name,
-            userId,
+            userId: req.userId,
         });
 
         await newFolder.save();
@@ -101,7 +101,7 @@ const getFolderById = async (req, res) => {
 /*                           GET ALL FOLDERS                                  */
 /* -------------------------------------------------------------------------- */
 const getAllFoldersByUserId = async (req, res) => {
-    const { userId } = req.params;
+    const userId = req.userId;
     try {
         if (!isValidObjectId(userId)) return res.status(400).json({ message: "Invalid user ID" });
 
