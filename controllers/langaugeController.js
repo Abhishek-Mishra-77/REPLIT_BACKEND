@@ -4,7 +4,7 @@ import Langauge from "../models/langaugeModel.js";
 /*                           CREATE LANGAUGE                                  */
 /* -------------------------------------------------------------------------- */
 const createLangauge = async (req, res) => {
-    const { name } = req.body;
+    const { name, logo } = req.body;
     try {
 
         if (!name) return res.status(400).json({ message: "Name is required" });
@@ -13,7 +13,7 @@ const createLangauge = async (req, res) => {
 
         if (existingLangauge) return res.status(400).json({ message: "Langauge already exists" });
 
-        const newLangauge = new Langauge({ name });
+        const newLangauge = new Langauge({ name, logo });
 
         await newLangauge.save();
 
@@ -27,8 +27,6 @@ const createLangauge = async (req, res) => {
 /*                           REMOVE LANGAUGE                                  */
 /* -------------------------------------------------------------------------- */
 const removeLangauge = async (req, res) => {
-
-
 }
 
 /* -------------------------------------------------------------------------- */
@@ -44,7 +42,14 @@ const getLangaugeById = async (req, res) => { }
 /* -------------------------------------------------------------------------- */
 /*                           GET ALL LANGAUGES                                */
 /* -------------------------------------------------------------------------- */
-const getAllLangauges = async (req, res) => { }
+const getAllLangauges = async (req, res) => {
+    try {
+        const langauges = await Langauge.find();
+        res.status(200).json({ langauges });
+    } catch (error) {
+        res.status(500).json({ message: "Server error", error: error.message });
+    }
+}
 
 
 export { createLangauge, removeLangauge, updateLangauge, getLangaugeById, getAllLangauges }
