@@ -99,6 +99,10 @@ const updateFile = async (req, res) => {
 
         if (!file) return res.status(404).json({ message: "File not found" });
 
+        const existingFile = await File.findOne({ name });
+
+        if (existingFile) return res.status(400).json({ message: "File name already exists" });
+
         if (name) file.name = name;
         if (folderId) file.folderId = folderId;
         if (langauge) file.langauge = langauge;
