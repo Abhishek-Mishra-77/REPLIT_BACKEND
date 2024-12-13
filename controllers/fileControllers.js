@@ -7,7 +7,7 @@ import Folder from "../models/folderModel.js";
 /* -------------------------------------------------------------------------- */
 const createFile = async (req, res) => {
     const { name, folderId, langauge } = req.body;
-    const { userId } = req.userId;
+    const userId = req.userId;
     try {
         if (!name || !userId || !folderId || !langauge) return res.status(400).json({ message: "Name, user ID, folder ID and langauge are required" });
 
@@ -17,11 +17,11 @@ const createFile = async (req, res) => {
 
         const existingFile = await File.findOne({ name });
 
-        if (!existingFile) return res.status(400).json({ message: "File name already exists" });
+        if (existingFile) return res.status(400).json({ message: "File name already exists" });
 
-        if (!await User.findById(userId)) return res.status(400).json({ message: "User ID not found" });
+        const existingFolder = await Folder.findById(folderId);
 
-        if (!await Folder.findById(folderId)) return res.status(400).json({ message: "Folder ID not found" });
+        if (!existingFolder) return res.status(400).json({ message: "Folder ID not found" });
 
         const newFile = new File({
             name,
