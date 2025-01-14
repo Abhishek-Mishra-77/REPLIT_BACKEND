@@ -4,12 +4,15 @@ import cors from "cors";
 import Database from "./utils/database.js";
 const app = express();
 
+
+
 import authRoutes from "./routes/authRoutes.js";
 import folderRoutes from "./routes/folderRoutes.js";
 import fileRoutes from "./routes/fileRoutes.js";
 import langaugeRoutes from "./routes/LangaugeRoutes.js";
 import compilerRoutes from "./routes/compilerRoutes.js";
 
+import createInitialUser from "./services/createInitialUser.js";
 
 /* -------------------------------------------------------------------------- */
 /*                           SERVER CONFIGURATION                             */
@@ -38,6 +41,7 @@ const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, async () => {
     await Database();
+    await createInitialUser();
     console.log(`Server is running on PORT ${PORT} and database connected.`);
 })
 
